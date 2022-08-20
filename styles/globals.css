@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bounce-custom {
+  animation: bounce-custom 0.5s;
+}
+@keyframes bounce-custom {
+  from,
+  to {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
+  }
+}
+
+
+.custom-scroll-bar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+.custom-scroll-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.custom-scroll-bar::-webkit-scrollbar-thumb {
+  background: #9CA3AF;
+}
+
+/* Handle on hover */
+.custom-scroll-bar::-webkit-scrollbar-thumb:hover {
+  background: #b3bac7;
+  transition: all;
+}
+
+#nprogress .bar {
+  height: 5px;
+}
+
+@font-face {
+    font-family: "ibm_plex-400";
+    src: url("/fonts/ibm_ples-Regular.ttf");
+}
+@font-face {
+  font-family: "ibm_plex-500";
+  src: url("/fonts/ibm_plex-Medium.ttf");
+}
+@font-face {
+  font-family: "SourceCodePro";
+  src: url("/fonts/SourceCodePro.ttf");
+}
