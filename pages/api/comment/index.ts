@@ -10,9 +10,7 @@ import dbConnect from "../../../lib/db";
 import Post from "../../../models/Post";
 import { isValidObjectId } from "mongoose";
 import { INewPostCommentResponse, IUserProfile } from "../../../utils/types";
-
-const getLikedBy = (likes: any, user: IUserProfile) =>
-  !user ? false : likes.includes(user.id);
+import { getLikedBy } from "../../../utils/helper";
 
 export const formatOldComment = (
   comment: any,

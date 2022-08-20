@@ -65,7 +65,7 @@ const AdminNav: FC<Props> = ({
           {navItems.map((item, index) => {
             return (
               <Link key={item.label + index} className="block" href={item.href}>
-                <li className="flex items-center text-xl cursor-pointer dark:text-high-contrast-dark text-high-contrast">
+                <li className="flex items-center text-xl cursor-pointer dark:text-high-contrast-dark text-high-contrast p-3 hover:scale-[0.98] transition">
                   <item.icon size={24} />
                   {visible ? (
                     <span className="leading-none animate-smooth-reveal ml-2">
@@ -78,25 +78,17 @@ const AdminNav: FC<Props> = ({
           })}
         </ul>
       </div>
-      <div className="w-full flex flex-col">
-        <button
-          onClick={() => signOut()}
-          className="flex space-x-2 items-center self-end text-low-contrast dark:text-low-contrast-dark py-3"
-        >
-          <AiOutlineLogout />
-          <span>Logout</span>
-        </button>
-        <button
-          onClick={toggleNav}
-          className="self-end text-low-contrast dark:text-low-contrast-dark"
-        >
-          {visible ? (
-            <RiMenuFoldFill size={30} />
-          ) : (
-            <RiMenuUnfoldFill size={30} />
-          )}
-        </button>
-      </div>
+
+      <button
+        onClick={toggleNav}
+        className="self-end text-low-contrast dark:text-low-contrast-dark hover:scale-[0.98] transition"
+      >
+        {visible ? (
+          <RiMenuFoldFill size={30} />
+        ) : (
+          <RiMenuUnfoldFill size={30} />
+        )}
+      </button>
     </nav>
   );
 };

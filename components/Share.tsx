@@ -20,7 +20,7 @@ interface Props {
 
 const Share: FC<Props> = ({ title, meta, slug }): JSX.Element => {
   return (
-    <div className="flex items-center space-x-3 sticky top-0 z-50 bg-primary dark:bg-primary-dark py-3">
+    <div className="flex items-center space-x-3 sticky top-0 z-50 py-3">
       <p className="text-high-contrast dark:text-high-contrast-dark font-semibold">
         Share:
       </p>

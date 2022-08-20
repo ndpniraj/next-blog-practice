@@ -1,4 +1,4 @@
-import Mongoose from "mongoose";
+import Mongoose, { Schema } from "mongoose";
 import { PostModel } from "../utils/types";
 
 const postSchema: Mongoose.Schema<PostModel> = new Mongoose.Schema(
@@ -12,6 +12,12 @@ const postSchema: Mongoose.Schema<PostModel> = new Mongoose.Schema(
       trim: true,
       required: true,
     },
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     meta: {
       type: String,
       trim: true,

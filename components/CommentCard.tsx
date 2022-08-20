@@ -15,6 +15,8 @@ import {
 import PostCommentForm from "./PostCommentForm";
 import { useSession } from "next-auth/react";
 import { ContentState, convertFromRaw } from "draft-js";
+import LikeHeart from "./LikeHeart";
+import ProfileIcon from "./ProfileIcon";
 
 export type editedComment = {
   content: string;
@@ -98,9 +100,10 @@ const CommentCard: FC<Props> = ({
 
   return (
     <div key={comment.id} className="flex space-x-3">
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-dark dark:bg-primary text-white dark:text-primary-dark text-xl select-none">
+      {/* <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-dark dark:bg-primary text-white dark:text-primary-dark text-xl select-none">
         {getNameInitial(owner.name)}
-      </div>
+      </div> */}
+      <ProfileIcon name={owner.name} />
       <div className="flex-1">
         <h1 className="dark:text-high-contrast-dark text-low-contrast font-semibold text-lg">
           {owner.name}
@@ -112,20 +115,24 @@ const CommentCard: FC<Props> = ({
           {convertToJsx(content)}
         </div>
         <div className="py-2 flex items-center space-x-4">
-          <Button onClick={() => onLikePress && onLikePress(comment)}>
-            {getHeartIcon()}
-            <span>{likes} likes</span>
-          </Button>
+          <LikeHeart
+            onClick={() => onLikePress && onLikePress(comment)}
+            label={likes + " likes"}
+            liked={comment.likedByOwner}
+          />
           <Button onClick={displayCommentReplyForm}>
-            <BsFillReplyAllFill size={18} /> <span>Reply</span>
+            <BsFillReplyAllFill size={18} />{" "}
+            <span className="sm:block hidden">Reply</span>
           </Button>
           {isOwnersComment && (
             <>
               <Button onClick={() => handleOnEditClick(comment)}>
-                <BsPencilSquare size={18} /> <span>Edit</span>
+                <BsPencilSquare size={18} />{" "}
+                <span className="sm:block hidden">Edit</span>
               </Button>
               <Button onClick={() => onDeleteClick && onDeleteClick(comment)}>
-                <BsFillTrashFill size={18} /> <span>Delete</span>
+                <BsFillTrashFill size={18} />{" "}
+                <span className="sm:block hidden">Delete</span>
               </Button>
             </>
           )}

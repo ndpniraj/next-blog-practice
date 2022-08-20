@@ -12,7 +12,12 @@ import {
 import Elements from "../components/Elements";
 import Image from "next/image";
 import Adsense from "../components/Adsense";
-import { catchError, dateFormat, runAsync } from "../utils/helper";
+import {
+  catchError,
+  dateFormat,
+  getSignInPath,
+  runAsync,
+} from "../utils/helper";
 import CopyBtnDemo from "../components/demo/CopyBtnDemo";
 import Share from "./Share";
 import dynamic from "next/dynamic";
@@ -28,6 +33,8 @@ import {
 } from "../utils/comment";
 import CommentCard, { editedComment } from "./CommentCard";
 import { useRouter } from "next/router";
+import LikeHeart from "./LikeHeart";
+import { isPostLikedByUser, updatePostLike } from "../utils/post";
 
 const PostCommentForm = dynamic(() => import("./PostCommentForm"), {
   ssr: false,
@@ -89,13 +96,23 @@ const Tags: FC<{ tags?: string[] }> = ({ tags }) => {
   );
 };
 
+// const getHeartIcon = () => {
+//   if (comment.likedByOwner) return <BsHeartFill color="#4790FD" size={16} />;
+//   return <BsHeart size={16} />;
+// };
+
 const PostDetail: FC<Props> = ({ post }) => {
   const [comments, setComments] = useState<postCommentResponse>([]);
   const [resetCommentForm, setResetCommentForm] = useState(false);
-  const { asPath } = useRouter();
+  const [isPostLikedByProfileOwner, setIsPostLikedByProfileOwner] =
+    useState(false);
+  const [likes, setLikes] = useState(0);
+  const router = useRouter();
+  const { asPath } = router;
 
-  const { status } = useSession();
+  const { status, data } = useSession();
   const authenticated = status === "authenticated";
+  const user = data?.user;
 
   const handleCommentSubmit = async (content: string) => {
     let { error, comment } = (await runAsync(
@@ -128,6 +145,19 @@ const PostDetail: FC<Props> = ({ post }) => {
     });
 
     setComments([...newComments]);
+  };
+
+  const handleOnPostLike = async () => {
+    if (!user) return router.push(getSignInPath(asPath));
+    const res = (await runAsync(updatePostLike(post.id), catchError)) as {
+      error: string;
+      newLikes: number;
+    };
+
+    if (res.error) return console.log(res);
+
+    setIsPostLikedByProfileOwner(!isPostLikedByProfileOwner);
+    setLikes(res.newLikes);
   };
 
   const handleOnCommentLike = async (comment: INewPostCommentResponse) => {
@@ -231,8 +261,19 @@ const PostDetail: FC<Props> = ({ post }) => {
     if (res.comments) setComments([...res.comments]);
   };
 
+  const findLikedByOwner = async () => {
+    const res = (await runAsync(isPostLikedByUser(post.id), catchError)) as any;
+
+    if (res.error) return console.log(res.error);
+    setIsPostLikedByProfileOwner(res.likedByOwner);
+    setLikes(res.likesCount);
+  };
+
   useEffect(() => {
-    if (post.id) fetchComments();
+    if (post.id) {
+      fetchComments();
+      findLikedByOwner();
+    }
   }, [post]);
 
   if (!post) return null;
@@ -260,6 +301,13 @@ const PostDetail: FC<Props> = ({ post }) => {
         </div>
         <Share title={title} meta={meta} slug={slug} />
         {source ? <MDXRemote components={components} {...source} /> : null}
+
+        <LikeHeart
+          onClick={handleOnPostLike}
+          className="text-xl"
+          label={likes + " likes"}
+          liked={isPostLikedByProfileOwner}
+        />
 
         <div className="p-3 border rounded border-low-contrast dark:border-low-contrast-dark mt-5">
           <div className="flex space-x-3">
@@ -333,7 +381,7 @@ const PostDetail: FC<Props> = ({ post }) => {
         ) : (
           <p className="py-5 text-high-contrast dark:text-high-contrast-dark text-lg ">
             Let me sign in to use comments{" "}
-            <Link href={asPath + "?auth=signin"}>
+            <Link href={getSignInPath(asPath)}>
               <a className="font-semibold underline">login</a>
             </Link>
           </p>

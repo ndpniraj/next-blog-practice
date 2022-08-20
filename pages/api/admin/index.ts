@@ -20,7 +20,8 @@ export default async function handler(
       limit: string;
     };
 
-    const comments = await Comment.find({});
+    // const comments = await Comment.find({});
+    res.json({ ok: true });
 
     // aggregate([
     //     {
@@ -46,9 +47,5 @@ export default async function handler(
     //       },
     //     },
     //   ])
-
-    res.json({
-      comments,
-    });
   }
 }

@@ -4,7 +4,11 @@ import { AiFillGithub, AiOutlineGoogle } from "react-icons/ai";
 import { signIn, useSession } from "next-auth/react";
 import Form from "../Form";
 import { loginSchema, validateWithSchema } from "../../utils/validator";
-import { getForgetPasswordPath, getSignUpPath } from "../../utils/helper";
+import {
+  getForgetPasswordPath,
+  getNonAuthPath,
+  getSignUpPath,
+} from "../../utils/helper";
 
 interface Props {}
 
@@ -40,7 +44,7 @@ const SignIn: FC<Props> = (props): JSX.Element => {
     setBusy(false);
 
     if (res?.error) return console.log(res.error);
-    router.replace(asPath.split("?auth=")[0]);
+    router.replace(getNonAuthPath(asPath));
   };
 
   return (
@@ -69,13 +73,13 @@ const SignIn: FC<Props> = (props): JSX.Element => {
         <div className="flex justify-between items-center text-sm">
           <Form.LinkTag
             title="Forget Password"
-            href={getForgetPasswordPath()}
+            href={getForgetPasswordPath(asPath)}
           />
           <p className="space-x-2">
             <span className="dark:text-low-contrast-dark text-low-contrast">
               I am new here
             </span>
-            <Form.LinkTag title="Sign up" href={getSignUpPath()} />
+            <Form.LinkTag title="Sign up" href={getSignUpPath(asPath)} />
           </p>
         </div>
 

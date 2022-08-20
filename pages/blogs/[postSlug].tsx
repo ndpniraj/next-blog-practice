@@ -83,6 +83,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           date: post.createdAt.toString(),
           tags: post.tags,
           slug: post.slug,
+          likes: post.likes?.length || 0,
         },
         relatedPosts,
       },

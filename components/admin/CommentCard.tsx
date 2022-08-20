@@ -16,6 +16,8 @@ import {
 import PostCommentForm from "../PostCommentForm";
 import { useSession } from "next-auth/react";
 import { ContentState, convertFromRaw } from "draft-js";
+import LikeHeart from "../LikeHeart";
+import ProfileIcon from "../ProfileIcon";
 
 export type editedComment = {
   content: string;
@@ -99,9 +101,7 @@ const CommentCard: FC<Props> = ({
 
   return (
     <div key={comment.id} className="flex space-x-3">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-dark dark:bg-primary text-white dark:text-primary-dark text-lg select-none">
-        {getNameInitial(owner.name)}
-      </div>
+      <ProfileIcon name={owner.name} />
       <div className="flex-1">
         <h1 className="dark:text-high-contrast-dark text-low-contrast font-semibold text-lg">
           {owner.name}
@@ -131,10 +131,11 @@ const CommentCard: FC<Props> = ({
           {convertToJsx(content)}
         </div>
         <div className="py-2 flex items-center space-x-4">
-          <Button onClick={() => onLikePress && onLikePress(comment)}>
-            {getHeartIcon()}
-            <span>{likes} likes</span>
-          </Button>
+          <LikeHeart
+            onClick={() => onLikePress && onLikePress(comment)}
+            label={likes + " likes"}
+            liked={comment.likedByOwner}
+          />
           <Button onClick={displayCommentReplyForm}>
             <BsFillReplyAllFill size={18} /> <span>Reply</span>
           </Button>

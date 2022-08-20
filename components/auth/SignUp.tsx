@@ -4,7 +4,12 @@ import { AiFillGithub, AiOutlineGoogle } from "react-icons/ai";
 import Form from "../Form";
 import { signupSchema, validateWithSchema } from "../../utils/validator";
 import axios from "axios";
-import { catchError, getSignInPath, runAsync } from "../../utils/helper";
+import {
+  catchError,
+  getNonAuthPath,
+  getSignInPath,
+  runAsync,
+} from "../../utils/helper";
 import { sendSignupRequest } from "../../utils/auth";
 import { signIn } from "next-auth/react";
 
@@ -50,7 +55,7 @@ const SignUp: FC<Props> = (props): JSX.Element => {
 
     if (!signInRes?.ok) return console.log(signInRes?.error);
 
-    router.replace(asPath.split("?auth=")[0]);
+    router.replace(getNonAuthPath(asPath));
   };
 
   return (
@@ -88,7 +93,7 @@ const SignUp: FC<Props> = (props): JSX.Element => {
           <span className="dark:text-low-contrast-dark text-low-contrast text-sm">
             Already have an account
           </span>
-          <Form.LinkTag title="Sign in" href={getSignInPath()} />
+          <Form.LinkTag title="Sign in" href={getSignInPath(asPath)} />
         </p>
 
         <p className="dark:text-low-contrast-dark text-low-contrast text-center">

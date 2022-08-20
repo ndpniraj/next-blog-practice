@@ -1,4 +1,4 @@
-import { ObjectId, Model } from "mongoose";
+import { Types, Model } from "mongoose";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ChangeEventHandler } from "react";
 
@@ -27,7 +27,7 @@ export type topics =
   | "Next JS";
 
 export interface PostModel {
-  _id?: ObjectId;
+  _id?: Types.ObjectId;
   createdAt?: Date;
   slug: string;
   title: string;
@@ -37,6 +37,7 @@ export interface PostModel {
   thumbnail: { url: string; public_id: string };
   tags: string[];
   topic?: topics;
+  likes?: Types.ObjectId[];
 }
 
 export type formattedPost = {
@@ -49,6 +50,7 @@ export type formattedPost = {
   slug: string;
   tags?: string[];
   source?: MDXRemoteSerializeResult;
+  likes: number;
 };
 
 export type postSchema = {

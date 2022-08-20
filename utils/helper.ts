@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { formattedPost, PostModel } from "./types";
+import { formattedPost, IUserProfile, PostModel } from "./types";
 
 export const formatPosts = (posts: PostModel[]): formattedPost[] => {
   return posts.map((p) => {
@@ -11,6 +11,7 @@ export const formatPosts = (posts: PostModel[]): formattedPost[] => {
       date: p.createdAt?.toString() || "",
       thumbnail: p.thumbnail?.url || "",
       slug: p.slug,
+      likes: p.likes?.length || 0,
     };
   });
 };
@@ -88,26 +89,25 @@ export const catchError = (error: any): { error: string } => {
   return { error: error.message || "Some thing went wrong!" };
 };
 
-export const getSignInPath = () => {
-  const { asPath } = useRouter();
+export const getSignInPath = (asPath: string) => {
   return asPath.split("?auth=")[0] + "?auth=signin";
 };
 
-export const getSignUpPath = () => {
-  const { asPath } = useRouter();
+export const getSignUpPath = (asPath: string) => {
   return asPath.split("?auth=")[0] + "?auth=signup";
 };
 
-export const getForgetPasswordPath = () => {
-  const { asPath } = useRouter();
+export const getForgetPasswordPath = (asPath: string) => {
   return asPath.split("?auth=")[0] + "?auth=forget-password";
 };
 
-export const getNonAuthPath = () => {
-  const { asPath } = useRouter();
+export const getNonAuthPath = (asPath: string) => {
   return asPath.split("?auth=")[0];
 };
 
 export const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
+
+export const getLikedBy = (likes: any, user: IUserProfile) =>
+  !user ? false : likes.includes(user.id);
